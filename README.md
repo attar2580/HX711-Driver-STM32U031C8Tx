@@ -132,7 +132,7 @@ Contains CubeMX-generated pin definitions:
 From the project root:
 
 ```bash
-cube-cmake --build "D:/STM32 Workspace/hx711/build/Debug" --
+cube-cmake --build "your_path/build/Debug" --
 ```
 
 ## Weight Processing Behavior
