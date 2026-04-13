@@ -1,5 +1,21 @@
+/**
+  ******************************************************************************
+  * @file    HX711.c
+  * @author  Fardeen
+  * @brief   Low-level HX711 ADC driver implementation.
+  * @details This module performs the GPIO binding, ready-flag tracking, and
+  *          bit-banged serial read sequence required to extract signed raw
+  *          load cell measurements from the HX711.
+  ******************************************************************************
+  */
+
 #include "HX711.h"
 
+/**
+  * @brief  Busy-wait for a small number of microseconds.
+  * @param  delay_us  Approximate delay duration in microseconds.
+  * @retval None
+  */
 static void HX711_DelayUs(uint32_t delay_us)
 {
   uint32_t outer;
@@ -15,6 +31,11 @@ static void HX711_DelayUs(uint32_t delay_us)
   }
 }
 
+/**
+  * @brief  Perform one complete HX711 conversion read.
+  * @param  hx711  Driver handle containing GPIO bindings.
+  * @retval Sign-extended 24-bit ADC value.
+  */
 static int32_t HX711_ReadSample(const HX711_HandleTypeDef *hx711)
 {
   uint32_t bit_index;
@@ -76,6 +97,11 @@ void HX711_Init(HX711_HandleTypeDef *hx711,
   }
 }
 
+/**
+  * @brief  Set the ready flag from the GPIO EXTI callback.
+  * @param  hx711  Driver handle tied to the HX711 interrupt source.
+  * @retval None
+  */
 void HX711_OnDoutLowIsr(HX711_HandleTypeDef *hx711)
 {
   if (hx711 != NULL)
@@ -84,6 +110,11 @@ void HX711_OnDoutLowIsr(HX711_HandleTypeDef *hx711)
   }
 }
 
+/**
+  * @brief  Check whether a new HX711 sample is pending.
+  * @param  hx711  Driver handle to query.
+  * @retval 1 when ready, 0 otherwise.
+  */
 uint8_t HX711_DataReady(const HX711_HandleTypeDef *hx711)
 {
   uint8_t ready = 0U;
@@ -96,6 +127,11 @@ uint8_t HX711_DataReady(const HX711_HandleTypeDef *hx711)
   return ready;
 }
 
+/**
+  * @brief  Read and clear the pending HX711 conversion.
+  * @param  hx711  Driver handle to consume.
+  * @retval Raw signed ADC sample, or 0 if no sample is pending.
+  */
 int32_t HX711_ReadRaw(HX711_HandleTypeDef *hx711)
 {
   int32_t sample = 0L;

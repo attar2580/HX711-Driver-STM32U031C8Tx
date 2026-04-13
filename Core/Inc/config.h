@@ -1,7 +1,14 @@
-/* *****************************************************************
- * File Name:       config.h
- * Description:     Centralized hardware and software tunables
- * ***************************************************************** */
+/**
+  ******************************************************************************
+  * @file    config.h
+  * @author  Fardeen
+  * @brief   Centralized application tuning constants for the STM32 firmware.
+  * @details This header groups all compile-time configuration values used by
+  *          the load cell processing stack and related application modules.
+  *          The values are intentionally kept in one place to simplify tuning
+  *          and to avoid scattering hard-coded constants throughout the code.
+  ******************************************************************************
+  */
 
 #ifndef CONFIG_H_
 #define CONFIG_H_

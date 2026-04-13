@@ -1,3 +1,14 @@
+/**
+  ******************************************************************************
+  * @file    hal_weight.c
+  * @author  Fardeen
+  * @brief   High-level HX711 load-cell processing implementation.
+  * @details This module consumes raw HX711 samples and converts them into a
+  *          stable user-facing weight value using tare, averaging, calibration,
+  *          and simple noise rejection logic.
+  ******************************************************************************
+  */
+
 #include "hal_weight.h"
 
 static HX711_HandleTypeDef *s_hx711 = NULL;
@@ -5,6 +16,12 @@ static int32_t s_offset = 0L;
 static int32_t s_last_stable_grams = 0L;
 static volatile uint8_t s_error_flag = 0U;
 
+/**
+  * @brief  Wait for a ready sample until a timeout expires.
+  * @param  start_tick  Tick value captured before waiting began.
+  * @param  timeout_ms  Maximum time to wait in milliseconds.
+  * @retval 1 when a sample is available, otherwise 0.
+  */
 static uint8_t HAL_Weight_WaitForSampleUntil(uint32_t start_tick,
                                              uint32_t timeout_ms)
 {
@@ -30,6 +47,11 @@ static uint8_t HAL_Weight_WaitForSampleUntil(uint32_t start_tick,
   return ready;
 }
 
+/**
+  * @brief  Blocking millisecond delay used during sample spacing.
+  * @param  delay_ms  Delay duration in milliseconds.
+  * @retval None
+  */
 static void HAL_Weight_WaitMs(uint32_t delay_ms)
 {
   uint32_t start_tick = HAL_GetTick();
@@ -40,6 +62,11 @@ static void HAL_Weight_WaitMs(uint32_t delay_ms)
   }
 }
 
+/**
+  * @brief  Initialize the weight-processing layer.
+  * @param  hx711  Initialized HX711 driver handle.
+  * @retval None
+  */
 void HAL_Weight_Init(HX711_HandleTypeDef *hx711)
 {
   s_hx711 = hx711;
@@ -48,16 +75,32 @@ void HAL_Weight_Init(HX711_HandleTypeDef *hx711)
   s_error_flag = 0U;
 }
 
+/**
+  * @brief  Read the current error flag.
+  * @retval 1 if an error is latched, otherwise 0.
+  */
 uint8_t HAL_Weight_HasError(void)
 {
   return s_error_flag;
 }
 
+/**
+  * @brief  Clear the latched error flag.
+  * @retval None
+  */
 void HAL_Weight_ClearError(void)
 {
   s_error_flag = 0U;
 }
 
+/**
+  * @brief  Perform a blocking tare cycle with timeout protection.
+  * @details The tare routine waits for a stream of HX711 samples, averages the
+  *          configured number of readings, and stores the resulting offset.
+  *          If the HX711 does not respond in time, the function exits safely
+  *          and leaves the offset at zero while latching an error state.
+  * @retval None
+  */
 void HAL_Weight_Tare(void)
 {
   uint32_t tare_start_tick;
@@ -110,6 +153,12 @@ void HAL_Weight_Tare(void)
   s_offset = (int32_t)(tare_sum / (int64_t)CONFIG_TARE_SAMPLES);
 }
 
+/**
+  * @brief  Convert the latest HX711 readings into kilograms.
+  * @details This function applies tare offset removal, calibration scaling,
+  *          noise suppression, and rounding before returning the final value.
+  * @retval Weight in kilograms.
+  */
 float HAL_Weight_Get_Kg(void)
 {
   int64_t sum = 0;

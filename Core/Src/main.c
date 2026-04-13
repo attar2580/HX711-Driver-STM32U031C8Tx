@@ -93,6 +93,12 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
+  /**
+    * @brief  Initialize the HX711 stack and perform the startup tare.
+    * @details The HX711 driver is bound to the GPIO pins configured by
+    *          CubeMX, the weight layer is attached, and a blocking tare is
+    *          executed before the main loop begins.
+    */
   HX711_Init(&g_hx711,
              HX711_SCK_GPIO_Port, HX711_SCK_Pin,
              HX711_DOUT_GPIO_Port, HX711_DOUT_Pin);
@@ -196,6 +202,11 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+/**
+  * @brief  Route the HX711 data-ready EXTI event into the driver.
+  * @param  GPIO_Pin  EXTI source pin number.
+  * @retval None
+  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == HX711_DOUT_Pin)
