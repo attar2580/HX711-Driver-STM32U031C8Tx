@@ -1,0 +1,7 @@
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:25:16:HAL_Weight_WaitForSampleUntil	24	static,ignoring_inline_asm
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:55:13:HAL_Weight_WaitMs	24	static,ignoring_inline_asm
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:70:6:HAL_Weight_Init	16	static
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:82:9:HAL_Weight_HasError	8	static
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:91:6:HAL_Weight_ClearError	8	static
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:104:6:HAL_Weight_Tare	32	static
+D:/STM32 Workspace/hx711/Core/Src/hal_weight.c:162:7:HAL_Weight_Get_Kg	64	static

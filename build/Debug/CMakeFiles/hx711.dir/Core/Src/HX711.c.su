@@ -1,0 +1,6 @@
+D:/STM32 Workspace/hx711/Core/Src/HX711.c:19:13:HX711_DelayUs	32	static,ignoring_inline_asm
+D:/STM32 Workspace/hx711/Core/Src/HX711.c:39:16:HX711_ReadSample	24	static,ignoring_inline_asm
+D:/STM32 Workspace/hx711/Core/Src/HX711.c:78:6:HX711_Init	24	static
+D:/STM32 Workspace/hx711/Core/Src/HX711.c:105:6:HX711_OnDoutLowIsr	16	static
+D:/STM32 Workspace/hx711/Core/Src/HX711.c:118:9:HX711_DataReady	24	static
+D:/STM32 Workspace/hx711/Core/Src/HX711.c:135:9:HX711_ReadRaw	24	static
